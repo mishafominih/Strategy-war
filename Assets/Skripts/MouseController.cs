@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
+    private List<iHighlighted> highlighted = new List<iHighlighted>();  // Список выделенных объектов
     private Vector3 startPosition;
     private Vector3 endPosition;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,16 +27,28 @@ public class MouseController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
+            foreach (iHighlighted e in highlighted)
+                e.unHighlight();
+
+            highlighted.Clear();
+
             Camera camera = GetComponent<Camera>();
             endPosition = camera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
             Debug.Log(endPosition.x);
             Debug.Log(endPosition.y);
 
-            endPosition.z = camera.nearClipPlane;
-            Vector2 mouseWorldPosition = camera.ScreenToWorldPoint(endPosition);
+            Collider2D collider = Physics2D.OverlapPoint(endPosition);
+            if (collider != null)
+            {
+                iHighlighted highlighted_item = collider.gameObject.GetComponent<iHighlighted>();
+                if (highlighted_item != null)
+                {
+                    highlighted.Add(highlighted_item);
 
-            Collider2D detectedCollider =
-                Physics2D.OverlapBox(mouseWorldPosition, detectionBoxSize, rotationAngle);
+                    foreach (iHighlighted e in highlighted)
+                        e.highlight();
+                }
+            }
         }
     }
 }
