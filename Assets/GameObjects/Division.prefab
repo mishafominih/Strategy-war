@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8849828039260630480}
+  - component: {fileID: 1017970568607547687}
   - component: {fileID: 886857864988424215}
   - component: {fileID: 8499932876680508905}
   - component: {fileID: 8155676390432343564}
+  - component: {fileID: 1554322123605972628}
   m_Layer: 0
   m_Name: Division
   m_TagString: Untagged
@@ -34,6 +36,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1017970568607547687
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3339204402632978063}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 1
+  m_Mass: 0.165
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &886857864988424215
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -147,3 +176,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d718a7790b4e37438355e704ce8cd75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1554322123605972628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3339204402632978063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc23bc04d74a6f648bed7609344d70f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: 20
+  speedRotation: 20

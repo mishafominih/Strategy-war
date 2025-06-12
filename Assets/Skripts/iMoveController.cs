@@ -1,0 +1,6 @@
+using UnityEngine;
+
+public interface iMoveController
+{
+    public void moveTo(Vector2 pos);
+}

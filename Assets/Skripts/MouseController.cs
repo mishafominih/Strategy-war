@@ -21,8 +21,6 @@ public class MouseController : MonoBehaviour
         {
             Camera camera = GetComponent<Camera>();
             startPosition = camera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
-            Debug.Log(startPosition.x);
-            Debug.Log(startPosition.y);
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -34,8 +32,6 @@ public class MouseController : MonoBehaviour
 
             Camera camera = GetComponent<Camera>();
             endPosition = camera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
-            Debug.Log(endPosition.x);
-            Debug.Log(endPosition.y);
 
             Collider2D collider = Physics2D.OverlapPoint(endPosition);
             if (collider != null)
@@ -49,6 +45,17 @@ public class MouseController : MonoBehaviour
                         e.highlight();
                 }
             }
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            Camera camera = GetComponent<Camera>();
+            Vector3 position = camera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+            foreach (iHighlighted e in highlighted)
+            {
+                e.moveTo(new Vector2(position.x, position.y));
+            }
+                
         }
     }
 }

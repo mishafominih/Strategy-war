@@ -15,4 +15,9 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         sprite.color = oldColor;
     }
+
+    public void moveTo(Vector2 pos)
+    {
+        GetComponent<iMoveController>().moveTo(pos);
+    }
 }
