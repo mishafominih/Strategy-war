@@ -51,7 +51,7 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         }
         else if (distanceVector.sqrMagnitude > 0.0001f) // Затем начнем движение
         {
-            rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
+            move(distanceVector);
         }
         else  // Дошли. Остановимся
         {
@@ -66,4 +66,10 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         rb.MoveRotation(rb.rotation + deltaAngle);
         targetAngle -= deltaAngle;
     }
+
+    private void move(Vector2 distanceVector)
+    {
+        rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
+    }
+
 }
