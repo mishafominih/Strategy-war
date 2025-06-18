@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Обработчик на управление выделенными объектами
@@ -8,6 +9,7 @@ using UnityEngine;
 public class HighlightedController : iMouseEventHandler
 {
     private List<iHighlighted> highlighted = new List<iHighlighted>();  // Список выделенных объектов
+
     public bool touchUp(Camera camera, Vector2 touchPosition)
     {
         var position = camera.ScreenToWorldPoint(touchPosition, Camera.MonoOrStereoscopicEye.Mono);
@@ -24,11 +26,15 @@ public class HighlightedController : iMouseEventHandler
                     foreach (iHighlighted e in highlighted)
                         e.unHighlight();
 
+                    EventsManager.eventUnHighlight.Invoke();
                     highlighted.Clear();
-                    return false;
+
+                    if (isContains)
+                        return false;
                 }
 
                 highlighted.Add(highlighted_item);
+                EventsManager.eventHighlight.Invoke(highlighted_item);
 
                 foreach (iHighlighted e in highlighted)
                     e.highlight();
@@ -43,6 +49,7 @@ public class HighlightedController : iMouseEventHandler
                 e.moveTo(new Vector2(position.x, position.y));
                 e.unHighlight();
             }
+            EventsManager.eventUnHighlight.Invoke();
             highlighted.Clear();
             return false;
         }

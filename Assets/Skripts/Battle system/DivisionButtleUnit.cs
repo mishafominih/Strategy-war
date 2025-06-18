@@ -11,11 +11,16 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 
     public float getDefencePoints(TypeTroops typeTroops)
     {
-        return defensePoints * UnitCount;
+        return defensePoints;
     }
 
     public float getAttackPoints()
     {
-        return damagePoints * UnitCount;
+        return damagePoints;
+    }
+
+    public float getUnitCount()
+    {
+        return UnitCount;
     }
 }

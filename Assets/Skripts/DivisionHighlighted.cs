@@ -20,4 +20,9 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
     {
         GetComponent<iMoveController>().moveTo(pos);
     }
+
+    public iButtleUnit getButtleUnit()
+    {
+        return GetComponent<DivisionButtleUnit>();
+    }
 }
