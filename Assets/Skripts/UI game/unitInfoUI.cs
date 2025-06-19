@@ -36,4 +36,9 @@ public class UnitInfoUI : MonoBehaviour
             buttleUnit.getAttackPoints()
         );
     }
+
+    public void Shoot()
+    {
+        
+    }
 }
