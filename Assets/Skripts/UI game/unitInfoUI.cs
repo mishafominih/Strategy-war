@@ -1,8 +1,15 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UnitInfoUI : MonoBehaviour
 {
+    [SerializeField]
+    public List<GameObject> buttons = new List<GameObject>();
     public iButtleUnit buttleUnit;
 
     private TMP_Text textMesh;
@@ -13,12 +20,19 @@ public class UnitInfoUI : MonoBehaviour
         EventsManager.eventUnHighlight.AddListener(unHighltghted);
 
         gameObject.SetActive(false);  // Вначале нет ничего выделенного. ОТображать панельку нет смысла
+
+        foreach (GameObject button in buttons)
+            button.SetActive(false);
     }
 
     private void highltghted(iHighlighted highlighted)
     {
         this.buttleUnit = highlighted.getButtleUnit();
         gameObject.SetActive(true);
+
+        foreach (UIButtons button in highlighted.getUIButtons())
+            if (buttons.Count > (int)button)
+                buttons[(int)button].SetActive(true);
     }
 
     private void unHighltghted()
@@ -30,7 +44,7 @@ public class UnitInfoUI : MonoBehaviour
     void Update()
     {
         textMesh.text = string.Format(
-            "Численность: {0}\r\nЗащита: {1}\r\nАтака: {2}",
+            "Солдат: {0}\r\nЗащита: {1}\r\nАтака: {2}",
             buttleUnit.getUnitCount(),
             buttleUnit.getDefencePoints(TypeTroops.infantry),
             buttleUnit.getAttackPoints()

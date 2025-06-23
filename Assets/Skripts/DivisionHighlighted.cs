@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DivisionHighlighted : MonoBehaviour, iHighlighted
@@ -24,5 +25,10 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
     public iButtleUnit getButtleUnit()
     {
         return GetComponent<DivisionButtleUnit>();
+    }
+
+    public List<UIButtons> getUIButtons()
+    {
+        return new List<UIButtons>(){ UIButtons.Fire };
     }
 }
