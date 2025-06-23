@@ -30,7 +30,7 @@ public class UnitInfoUI : MonoBehaviour
         this.buttleUnit = highlighted.getButtleUnit();
         gameObject.SetActive(true);
 
-        foreach (UIButtons button in highlighted.getUIButtons())
+        foreach (AttackType button in highlighted.getAttackTypes())
             if (buttons.Count > (int)button)
                 buttons[(int)button].SetActive(true);
     }
@@ -53,6 +53,11 @@ public class UnitInfoUI : MonoBehaviour
 
     public void Shoot()
     {
-        
+        buttleUnit.Attack(buttleUnit, AttackType.Fire);
+    }
+
+    public void HandButtle()
+    {
+        buttleUnit.Attack(buttleUnit, AttackType.HandButtle);
     }
 }

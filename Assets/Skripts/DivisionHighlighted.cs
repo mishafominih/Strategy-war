@@ -27,8 +27,8 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
         return GetComponent<DivisionButtleUnit>();
     }
 
-    public List<UIButtons> getUIButtons()
+    public List<AttackType> getAttackTypes()
     {
-        return new List<UIButtons>(){ UIButtons.Fire };
+        return new List<AttackType>(){ AttackType.Fire, AttackType.HandButtle };
     }
 }

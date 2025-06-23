@@ -23,4 +23,10 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     {
         return UnitCount;
     }
+
+    public bool Attack(iButtleUnit buttleUnit, AttackType attackType)
+    {
+        Debug.Log("Attack"!);
+        return true;
+    }
 }
