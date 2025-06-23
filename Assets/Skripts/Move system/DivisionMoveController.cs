@@ -72,4 +72,9 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
     }
 
+    public bool IsMove()
+    {
+        Vector2 distanceVector = targetPosition - rb.position;
+        return distanceVector.sqrMagnitude < 0.0001f;
+    }
 }

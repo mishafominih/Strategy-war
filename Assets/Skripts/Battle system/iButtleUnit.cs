@@ -7,4 +7,6 @@ public interface iButtleUnit
     public float getAttackPoints();
     public float getUnitCount();
     public bool Attack(iButtleUnit buttleUnit, AttackType attackType);
+    public void Damage();
+    public Vector2 GetPosition();
 }
