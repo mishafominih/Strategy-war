@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class EventsManager
 {
-    public static UnityEvent<iHighlighted> eventHighlight = new UnityEvent<iHighlighted>();
-    public static UnityEvent eventUnHighlight = new UnityEvent();
+    public static UnityEvent<iHighlighted> eventTouchHighlighted = new UnityEvent<iHighlighted>();  // Событие выбора войск
+    public static UnityEvent<Vector2> eventTouchEmpty = new UnityEvent<Vector2>();  // Событие выбора войск
+    public static UnityEvent<iHighlighted> eventHighlight = new UnityEvent<iHighlighted>();  // Выделение войска
+    public static UnityEvent<iHighlighted> eventUnHighlight = new UnityEvent<iHighlighted>();  // Снятие выделения
 }

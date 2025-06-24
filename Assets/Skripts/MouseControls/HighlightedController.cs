@@ -10,6 +10,23 @@ public class HighlightedController : iMouseEventHandler
 {
     private List<iHighlighted> highlighted = new List<iHighlighted>();  // Список выделенных объектов
 
+    public HighlightedController()
+    {
+        EventsManager.eventHighlight.AddListener(eventHighltghtedHandler);
+        EventsManager.eventUnHighlight.AddListener(eventUnHighltghtedHandler);
+    }
+
+
+    private void eventHighltghtedHandler(iHighlighted highlightedItem)
+    {
+        highlighted.Add(highlightedItem);
+    }
+
+    private void eventUnHighltghtedHandler(iHighlighted highlightedItem)
+    {
+        highlighted.Remove(highlightedItem);
+    }
+
     public bool touchUp(Camera camera, Vector2 touchPosition)
     {
         var position = camera.ScreenToWorldPoint(touchPosition, Camera.MonoOrStereoscopicEye.Mono);
@@ -20,40 +37,14 @@ public class HighlightedController : iMouseEventHandler
             iHighlighted highlighted_item = collider.gameObject.GetComponent<iHighlighted>();
             if (highlighted_item != null)
             {
-                if (highlighted.Count > 0)
-                {
-                    var isContains = highlighted.Contains(highlighted_item);
-                    foreach (iHighlighted e in highlighted)
-                        e.unHighlight();
-
-                    EventsManager.eventUnHighlight.Invoke();
-                    highlighted.Clear();
-
-                    if (isContains)
-                        return false;
-                }
-
-                highlighted.Add(highlighted_item);
-                EventsManager.eventHighlight.Invoke(highlighted_item);
-
-                foreach (iHighlighted e in highlighted)
-                    e.highlight();
-
-                return true;
+                EventsManager.eventTouchHighlighted.Invoke(highlighted_item);
             }
         }
         else
         {
-            foreach (iHighlighted e in highlighted)
-            {
-                e.moveTo(new Vector2(position.x, position.y));
-                e.unHighlight();
-            }
-            EventsManager.eventUnHighlight.Invoke();
-            highlighted.Clear();
-            return false;
+            EventsManager.eventTouchEmpty.Invoke(new Vector2(position.x, position.y));
         }
-        return false;
+        return highlighted.Count > 0;
     }
 
     public bool touchDown(Camera camera, Vector2 touchPosition)
