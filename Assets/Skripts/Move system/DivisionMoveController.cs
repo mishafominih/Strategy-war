@@ -74,7 +74,6 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
 
     public bool IsMove()
     {
-        Vector2 distanceVector = targetPosition - rb.position;
-        return distanceVector.sqrMagnitude < 0.0001f;
+        return rb.linearVelocity.magnitude > 0.001f;
     }
 }

@@ -19,6 +19,7 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
 
     public void moveTo(Vector2 pos)
     {
+        getButtleUnit().BreakAttack();
         GetComponent<iMoveController>().moveTo(pos);
     }
 

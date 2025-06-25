@@ -204,5 +204,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitCount: 4000
-  damagePoints: 100
+  damagePoints: 50
   defensePoints: 100

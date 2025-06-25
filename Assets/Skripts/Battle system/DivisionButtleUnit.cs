@@ -1,4 +1,6 @@
+using System;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
@@ -9,9 +11,13 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     private iMoveController moveController;
     private iButtleUnit target;
     private AttackType attackType;
+    private Rigidbody2D rb;
+    private Collider2D collider;
     void Start()
     {
         moveController = GetComponent<DivisionMoveController>();
+        rb = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
     }
 
     public TypeTroops getType()
@@ -36,9 +42,17 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 
     public bool Attack(iButtleUnit buttleUnit, AttackType attackType)
     {
-        target = buttleUnit;
-        this.attackType = attackType;
-        moveController.moveTo(target.GetPosition());
+        if (attackType == AttackType.HandButtle)
+        {
+            target = buttleUnit;
+            this.attackType = attackType;
+            moveController.moveTo(target.GetPosition());
+        }
+        else
+        {
+            var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
+            buttleUnit.Damage(damage);
+        }
 
         return true;
     }
@@ -47,9 +61,14 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     {
         if (target != null)
         {
-            if (!moveController.IsMove())
+            if (rb.IsTouching(target.GetCollider()))
             {
-                target.Damage();
+                var damage = UnitCount * damagePoints;
+                target.Damage(damage);
+            }
+            else if (!moveController.IsMove())
+            {
+                moveController.moveTo(target.GetPosition());
             }
         }
     }
@@ -59,8 +78,24 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
         return transform.position;
     }
 
-    public void Damage()
+    public void Damage(float damage)
     {
-        return;
+        var c = (damage / defensePoints) * Time.deltaTime * 0.01f;
+        Debug.Log(c);
+        UnitCount -= c;
+        if (UnitCount <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public Collider2D GetCollider()
+    {
+        return collider;
+    }
+
+    public void BreakAttack()
+    {
+        target = null;
     }
 }
