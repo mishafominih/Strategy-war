@@ -81,6 +81,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             {
                 if (rb.IsTouching(target.GetCollider()))
                 {
+                    moveController.Stop();
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }
