@@ -11,4 +11,6 @@ public interface iButtleUnit
     public void Damage(float damage);
     public Vector2 GetPosition();
     public Collider2D GetCollider();
+    public bool IsEnemy(iButtleUnit buttleUnit);
+    public EnemyColor GetColor();
 }

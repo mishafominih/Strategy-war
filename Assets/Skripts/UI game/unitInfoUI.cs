@@ -53,7 +53,10 @@ public class UnitInfoUI : MonoBehaviour
         else if (isCommand)  // Нажали на кнопку атаки
         {
             isCommand = false;
-            highlighted.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
+            if (highlighted.getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
+            {
+                highlighted.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
+            }
         }
         else  // Нажали на другого юнита, перекинем выделение на него
         {
@@ -87,7 +90,7 @@ public class UnitInfoUI : MonoBehaviour
         var buttleUnit = highlighted.getButtleUnit();
         textMesh.text = string.Format(
             "Солдат: {0}\r\nЗащита: {1}\r\nАтака: {2}",
-            buttleUnit.getUnitCount(),
+            (int)buttleUnit.getUnitCount(),
             buttleUnit.getDefencePoints(TypeTroops.infantry),
             buttleUnit.getAttackPoints()
         );

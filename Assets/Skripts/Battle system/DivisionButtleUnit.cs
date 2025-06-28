@@ -6,6 +6,8 @@ using UnityEngine;
 public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 {
     [SerializeField]
+    protected EnemyColor enemyColor;
+    [SerializeField]
     protected float UnitCount, damagePoints, defensePoints;
 
     private iMoveController moveController;
@@ -124,5 +126,15 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     public void BreakAttack()
     {
         target = null;
+    }
+
+    public bool IsEnemy(iButtleUnit buttleUnit)
+    {
+        return enemyColor != buttleUnit.GetColor();
+    }
+
+    public EnemyColor GetColor()
+    {
+        return enemyColor;
     }
 }
