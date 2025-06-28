@@ -6,6 +6,7 @@ using UnityEngine;
 public class CameraPositionController : iMouseEventHandler
 {
     private Vector3 previousMousePosition;
+    private GameObject map;
 
     public bool touchDown(Camera camera, Vector2 touchPosition)
     {
@@ -18,6 +19,19 @@ public class CameraPositionController : iMouseEventHandler
         var currentMousePosition = camera.ScreenToWorldPoint(touchPosition, Camera.MonoOrStereoscopicEye.Mono);
         var dist = previousMousePosition - currentMousePosition;
         camera.transform.position += dist;
+
+        var map = getMap().GetComponent<SpriteRenderer>();
+        var isContains = map.bounds.Contains(
+            new Vector3(
+                camera.transform.position.x,
+                camera.transform.position.y,
+                map.transform.position.z
+        ));
+        if (!isContains)
+        {
+            camera.transform.position -= dist;
+        }
+
         return false;
     }
 
@@ -34,5 +48,10 @@ public class CameraPositionController : iMouseEventHandler
     public bool mouseScroll(Camera camera, float value)
     {
         return false;
+    }
+
+    private GameObject getMap()
+    {
+        return map is null ? GameObject.FindGameObjectWithTag("Map") : map;
     }
 }

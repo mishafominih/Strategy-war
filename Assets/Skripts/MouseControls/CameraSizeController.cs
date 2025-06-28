@@ -9,7 +9,7 @@ public class CameraSizeController : iMouseEventHandler
     private float previousDist = 0f;
 
     public float minZoomSize = 2;
-    public float maxZoomSize = 5;
+    public float maxZoomSize = 10;
     public bool doubleTouch(Camera camera, Vector2 firstTouch, Vector2 secondTouch)
     {
         var dist = Vector2.Distance(firstTouch, secondTouch);
