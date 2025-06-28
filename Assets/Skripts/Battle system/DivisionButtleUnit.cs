@@ -48,27 +48,54 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             this.attackType = attackType;
             moveController.moveTo(target.GetPosition());
         }
-        else
+        else if (attackType == AttackType.Fire)
         {
-            var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
-            buttleUnit.Damage(damage);
+            target = buttleUnit;
+            this.attackType = attackType;
+            if (allowedDistanceForFire())
+            {
+                moveController.rotateTo(target.GetPosition());
+            }
+            else
+            {
+                moveController.moveTo(target.GetPosition());
+            }
         }
 
         return true;
+    }
+
+    private bool allowedDistanceForFire()
+    {
+        var distance = target.GetPosition() - GetPosition();
+        return distance.magnitude < 3;
     }
 
     void FixedUpdate()
     {
         if (target != null)
         {
-            if (rb.IsTouching(target.GetCollider()))
+            if (attackType == AttackType.HandButtle)
             {
-                var damage = UnitCount * damagePoints;
-                target.Damage(damage);
+                if (rb.IsTouching(target.GetCollider()))
+                {
+                    var damage = UnitCount * damagePoints;
+                    target.Damage(damage);
+                }
+                else if (!moveController.IsMove())
+                {
+                    moveController.moveTo(target.GetPosition());
+                }
             }
-            else if (!moveController.IsMove())
+            if (attackType == AttackType.Fire)
             {
-                moveController.moveTo(target.GetPosition());
+                if (!moveController.IsRotate() && allowedDistanceForFire())
+                {
+                    var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
+                    target.Damage(damage);
+                    target = null;
+                    moveController.Stop();
+                }
             }
         }
     }

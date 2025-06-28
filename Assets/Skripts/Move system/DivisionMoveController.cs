@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 using static UnityEngine.GraphicsBuffer;
 
 public class DivisionMoveController : MonoBehaviour, iMoveController
@@ -12,14 +13,14 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
     private float targetAngle = 0;
     public void moveTo(Vector2 pos)
     {
+        Stop();
         targetPosition = pos;
-        targetAngle = calcTargetAngle();
-        stop();
+        targetAngle = calcTargetAngle(pos);
     }
 
-    private float calcTargetAngle()
+    private float calcTargetAngle(Vector2 pos)
     {
-        Vector2 distanceVector = targetPosition - rb.position;
+        Vector2 distanceVector = pos - rb.position;
         var angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg - 90;
         var targetAngle = angle - rb.rotation;
 
@@ -30,9 +31,11 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         return targetAngle;
     }
 
-    private void stop()
+    public void Stop()
     {
         rb.linearVelocity = Vector2.zero;
+        targetPosition = transform.position;
+        targetAngle = 0;
     }
 
     void Start()
@@ -45,7 +48,7 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
     {
         Vector2 distanceVector = targetPosition - rb.position;
 
-        if (Mathf.Abs(targetAngle) > 1f)  // Вначале повернем
+        if (IsRotate())  // Вначале повернем
         {
             rotate();
         }
@@ -55,7 +58,7 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         }
         else  // Дошли. Остановимся
         {
-            stop();
+            Stop();
         }
     }
 
@@ -75,5 +78,16 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
     public bool IsMove()
     {
         return rb.linearVelocity.magnitude > 0.001f;
+    }
+
+    public void rotateTo(Vector2 pos)
+    {
+        targetAngle = calcTargetAngle(pos);
+        Stop();
+    }
+
+    public bool IsRotate()
+    {
+        return Mathf.Abs(targetAngle) > 1f;
     }
 }
