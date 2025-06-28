@@ -30,8 +30,18 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
 
     public void Stop()
     {
-        rb.linearVelocity = Vector2.zero;
+        stopMove();
         targetPosition = transform.position;
+        stopRotate();
+    }
+
+    private void stopMove()
+    {
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    private void stopRotate()
+    {
         targetAngle = 0;
     }
 
@@ -48,6 +58,7 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         if (IsRotate())  // Вначале повернем
         {
             rotate();
+            stopMove();
         }
         else if (distanceVector.sqrMagnitude > 0.0001f) // Затем начнем движение
         {
@@ -79,8 +90,8 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
 
     public void rotateTo(Vector2 pos)
     {
-        targetAngle = calcTargetAngle(pos);
         Stop();
+        targetAngle = calcTargetAngle(pos);
     }
 
     public bool IsRotate()
