@@ -15,11 +15,13 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     private AttackType attackType;
     private Rigidbody2D rb;
     private Collider2D collider;
+    private iAnimationController animationController;
     void Start()
     {
         moveController = GetComponent<DivisionMoveController>();
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+        animationController = GetComponent<DivisionAnimationController>();
     }
 
     public TypeTroops getType()
@@ -98,6 +100,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
                     target.Damage(damage);
                     target = null;
                     moveController.Stop();
+                    animationController.AttackEvent(attackType);
                 }
             }
         }
