@@ -141,4 +141,9 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     {
         return enemyColor;
     }
+
+    public float GetMaxUnitCount()
+    {
+        return 8000;
+    }
 }

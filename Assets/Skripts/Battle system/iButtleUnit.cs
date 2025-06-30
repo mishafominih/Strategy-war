@@ -6,6 +6,7 @@ public interface iButtleUnit
     public float getDefencePoints(TypeTroops typeTroops);
     public float getAttackPoints();
     public float getUnitCount();
+    public float GetMaxUnitCount();
     public bool Attack(iButtleUnit buttleUnit, AttackType attackType);
     public void BreakAttack();
     public void Damage(float damage);

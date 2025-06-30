@@ -1,9 +1,12 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class DivisionAnimationController : MonoBehaviour, iAnimationController
 {
     [SerializeField] protected GameObject smokeObject;
     [SerializeField] protected GameObject startSmokePosition, endSmokePosition;
+
+    private iButtleUnit buttleUnit;
     public void AttackEvent(AttackType attackType)
     {
         if (attackType == AttackType.Fire)
@@ -17,6 +20,21 @@ public class DivisionAnimationController : MonoBehaviour, iAnimationController
                     Destroy(new_obj, 5);
                 }
             }
+        }
+    }
+
+    void Start()
+    {
+        buttleUnit = GetComponent<DivisionButtleUnit>();
+    }
+
+    void FixedUpdate()
+    {
+        if (buttleUnit != null)
+        {
+            var k = buttleUnit.getUnitCount() / buttleUnit.GetMaxUnitCount();  // от 0 до 1
+            var scale = 0.5f + k / 2;
+            transform.localScale = new Vector3(scale, scale, scale);
         }
     }
 
