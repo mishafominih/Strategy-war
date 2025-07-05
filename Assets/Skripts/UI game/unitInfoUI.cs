@@ -15,7 +15,7 @@ public class UnitInfoUI : MonoBehaviour
     private TMP_Text textMesh;
 
     private AttackType attackType;
-    private bool isCommand = false;
+    private ButtonType buttonPressed = ButtonType.None;
     void Start()
     {
         textMesh = GetComponentInChildren<TMP_Text>();
@@ -33,7 +33,7 @@ public class UnitInfoUI : MonoBehaviour
         if (highlighted == highlightedItem)  // Нажали на тот же юнит, снимаем выделение
         {
             highlighted = null;
-            isCommand = false;
+            buttonPressed = ButtonType.None;
             gameObject.SetActive(false);
             highlightedItem.unHighlight();
             EventsManager.eventUnHighlight.Invoke(highlightedItem);
@@ -50,9 +50,9 @@ public class UnitInfoUI : MonoBehaviour
             highlighted.highlight();
             EventsManager.eventHighlight.Invoke(highlighted);
         }
-        else if (isCommand)  // Нажали на кнопку атаки
+        else if (buttonPressed == ButtonType.Attack)  // Нажали на кнопку атаки
         {
-            isCommand = false;
+            buttonPressed = ButtonType.None;
             if (highlighted.getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
             {
                 highlighted.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
@@ -74,9 +74,12 @@ public class UnitInfoUI : MonoBehaviour
     {
         if (highlighted != null)
         {
-            highlighted.moveTo(position);
+            if (buttonPressed == ButtonType.Move)
+            {
+                highlighted.moveTo(position);
+            }
 
-            isCommand = false;
+            buttonPressed = ButtonType.None;
             gameObject.SetActive(false);
             highlighted.unHighlight();
             EventsManager.eventUnHighlight.Invoke(highlighted);
@@ -98,13 +101,17 @@ public class UnitInfoUI : MonoBehaviour
 
     public void Shoot()
     {
-        isCommand = true;
+        buttonPressed = ButtonType.Attack;
         attackType = AttackType.Fire;
     }
 
     public void HandButtle()
     {
-        isCommand = true;
+        buttonPressed = ButtonType.Attack;
         attackType = AttackType.HandButtle;
+    }
+    public void Move()
+    {
+        buttonPressed = ButtonType.Move;
     }
 }

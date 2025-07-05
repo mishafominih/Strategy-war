@@ -144,6 +144,6 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 
     public float GetMaxUnitCount()
     {
-        return 8000;
+        return 4000;
     }
 }
