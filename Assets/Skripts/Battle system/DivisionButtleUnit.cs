@@ -24,6 +24,16 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         animationController = GetComponent<DivisionAnimationController>();
+
+        EventsManager.eventButtleUnitDie.AddListener(buttleUnitDieHandler);
+    }
+
+    private void buttleUnitDieHandler(iButtleUnit buttleUnit)
+    {
+        if (buttleUnit == target)
+        {
+            BreakAttack();
+        }
     }
 
     public TypeTroops getType()
@@ -101,20 +111,16 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
                 {
                     if (fireTimer.IsTime())
                     {
-                        FireAttack();
+                        var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
+                        target.Damage(damage);
+                        moveController.Stop();
+                        animationController.AttackEvent(attackType);
+
                         fireTimer.Refresh();
                     }
                 }
             }
         }
-    }
-
-    private void FireAttack()
-    {
-        var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
-        target.Damage(damage);
-        moveController.Stop();
-        animationController.AttackEvent(attackType);
     }
 
     public Vector2 GetPosition()
@@ -129,6 +135,8 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
         UnitCount -= c;
         if (UnitCount <= 0)
         {
+            // Публикуем событие о своей смерти
+            EventsManager.eventButtleUnitDie.Invoke(this);
             Destroy(gameObject);
         }
     }
