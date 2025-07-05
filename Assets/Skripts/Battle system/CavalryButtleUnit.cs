@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
+public class CavalryButtleUnit : MonoBehaviour, iButtleUnit
 {
     [SerializeField]
     protected EnemyColor enemyColor;
@@ -18,7 +14,6 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     private Rigidbody2D rb;
     private Collider2D collider;
     private iAnimationController animationController;
-    private Timer fireTimer = new Timer(5, 5).Start();  // Выстрел должен произойти сразу
     void Start()
     {
         moveController = GetComponent<iMoveController>();
@@ -39,7 +34,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 
     public TypeTroops getType()
     {
-        return TypeTroops.infantry;
+        return TypeTroops.cavalry;
     }
 
     public float getDefencePoints(TypeTroops typeTroops)
@@ -65,27 +60,8 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             this.attackType = attackType;
             moveController.moveTo(target.GetPosition());
         }
-        else if (attackType == AttackType.Fire)
-        {
-            target = buttleUnit;
-            this.attackType = attackType;
-            if (allowedDistanceForFire())
-            {
-                moveController.rotateTo(target.GetPosition());
-            }
-            else
-            {
-                moveController.moveTo(target.GetPosition());
-            }
-        }
 
         return true;
-    }
-
-    private bool allowedDistanceForFire()
-    {
-        var distance = target.GetPosition() - GetPosition();
-        return distance.magnitude < 3;
     }
 
     void FixedUpdate()
@@ -103,22 +79,6 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
                 else if (!moveController.IsMove())
                 {
                     moveController.moveTo(target.GetPosition());
-                }
-            }
-            if (attackType == AttackType.Fire)
-            {
-                fireTimer.Update();
-                if (!moveController.IsRotate() && allowedDistanceForFire())
-                {
-                    if (fireTimer.IsTime())
-                    {
-                        var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
-                        target.Damage(damage);
-                        moveController.Stop();
-                        animationController.AttackEvent(attackType);
-
-                        fireTimer.Drop();
-                    }
                 }
             }
         }
@@ -149,7 +109,6 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     public void BreakAttack()
     {
         target = null;
-        fireTimer.Refresh();
     }
 
     public bool IsEnemy(iButtleUnit buttleUnit)
@@ -169,6 +128,6 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
 
     public List<AttackType> getAttackTypes()
     {
-        return new List<AttackType>() { AttackType.Fire, AttackType.HandButtle };
+        return new List<AttackType>() { AttackType.HandButtle };
     }
 }

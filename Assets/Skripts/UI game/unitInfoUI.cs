@@ -39,7 +39,7 @@ public class UnitInfoUI : MonoBehaviour
             highlighted = highlightedItem;
             gameObject.SetActive(true);
 
-            foreach (AttackType button in highlighted.getAttackTypes())
+            foreach (AttackType button in highlighted.getButtleUnit().getAttackTypes())
                 if (buttons.Count > (int)button)
                     buttons[(int)button].SetActive(true);
 

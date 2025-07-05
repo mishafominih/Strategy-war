@@ -26,7 +26,7 @@ public class DivisionAnimationController : MonoBehaviour, iAnimationController
 
     void Start()
     {
-        buttleUnit = GetComponent<DivisionButtleUnit>();
+        buttleUnit = GetComponent<iButtleUnit>();
     }
 
     void FixedUpdate()

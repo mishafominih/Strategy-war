@@ -25,11 +25,6 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
 
     public iButtleUnit getButtleUnit()
     {
-        return GetComponent<DivisionButtleUnit>();
-    }
-
-    public List<AttackType> getAttackTypes()
-    {
-        return new List<AttackType>(){ AttackType.Fire, AttackType.HandButtle };
+        return GetComponent<iButtleUnit>();
     }
 }

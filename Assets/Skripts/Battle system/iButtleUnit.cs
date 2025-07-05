@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface iButtleUnit
@@ -14,4 +15,5 @@ public interface iButtleUnit
     public Collider2D GetCollider();
     public bool IsEnemy(iButtleUnit buttleUnit);
     public EnemyColor GetColor();
+    public List<AttackType> getAttackTypes();
 }
