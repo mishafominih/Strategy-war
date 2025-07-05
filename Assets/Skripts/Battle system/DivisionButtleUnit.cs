@@ -116,7 +116,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
                         moveController.Stop();
                         animationController.AttackEvent(attackType);
 
-                        fireTimer.Refresh();
+                        fireTimer.Drop();
                     }
                 }
             }
@@ -149,6 +149,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     public void BreakAttack()
     {
         target = null;
+        fireTimer.Refresh();
     }
 
     public bool IsEnemy(iButtleUnit buttleUnit)

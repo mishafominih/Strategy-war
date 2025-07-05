@@ -32,11 +32,7 @@ public class UnitInfoUI : MonoBehaviour
     {
         if (highlighted == highlightedItem)  // Нажали на тот же юнит, снимаем выделение
         {
-            highlighted = null;
-            buttonPressed = ButtonType.None;
-            gameObject.SetActive(false);
-            highlightedItem.unHighlight();
-            EventsManager.eventUnHighlight.Invoke(highlightedItem);
+            UnHighlight();
         }
         else if (highlighted == null)  // Нажали первый раз, ставим выделение
         {
@@ -52,11 +48,11 @@ public class UnitInfoUI : MonoBehaviour
         }
         else if (buttonPressed == ButtonType.Attack)  // Нажали на кнопку атаки
         {
-            buttonPressed = ButtonType.None;
             if (highlighted.getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
             {
                 highlighted.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
             }
+            UnHighlight();
         }
         else  // Нажали на другого юнита, перекинем выделение на него
         {
@@ -70,6 +66,15 @@ public class UnitInfoUI : MonoBehaviour
         }
     }
 
+    private void UnHighlight()
+    {
+        buttonPressed = ButtonType.None;
+        gameObject.SetActive(false);
+        highlighted.unHighlight();
+        EventsManager.eventUnHighlight.Invoke(highlighted);
+        highlighted = null;
+    }
+
     private void eventTouchEmptyHandler(Vector2 position)
     {
         if (highlighted != null)
@@ -79,11 +84,7 @@ public class UnitInfoUI : MonoBehaviour
                 highlighted.moveTo(position);
             }
 
-            buttonPressed = ButtonType.None;
-            gameObject.SetActive(false);
-            highlighted.unHighlight();
-            EventsManager.eventUnHighlight.Invoke(highlighted);
-            highlighted = null;
+            UnHighlight();
         }
     }
 
