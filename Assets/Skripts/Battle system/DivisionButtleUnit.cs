@@ -17,7 +17,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     private Rigidbody2D rb;
     private Collider2D collider;
     private iAnimationController animationController;
-    private float fireTimer = 10;  // Выстрел должен произойти сразу
+    private Timer fireTimer = new Timer(5, 5).Start();  // Выстрел должен произойти сразу
     void Start()
     {
         moveController = GetComponent<DivisionMoveController>();
@@ -96,14 +96,13 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             }
             if (attackType == AttackType.Fire)
             {
-                fireTimer += Time.deltaTime;
+                fireTimer.Update();
                 if (!moveController.IsRotate() && allowedDistanceForFire())
                 {
-                    if (fireTimer > 5)
+                    if (fireTimer.IsTime())
                     {
                         FireAttack();
-                        fireTimer = 0;
-
+                        fireTimer.Refresh();
                     }
                 }
             }

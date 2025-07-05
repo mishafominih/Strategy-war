@@ -5,19 +5,19 @@ public class Timer
 {
     private float _time = 0;
     private float period;
-    private UnityAction action;
     public bool isWork { get; private set; }
 
-    public Timer(float period, UnityAction action)
+    public Timer(float period, float startTime=0)
     {
         this.period = period;
-        this.action = action;
+        _time = startTime;
         Stop();
     }
 
-    public void Start()
+    public Timer Start()
     {
         isWork = true;
+        return this;
     }
 
     public void Stop()
@@ -29,16 +29,14 @@ public class Timer
     {
         if (isWork)
             _time += Time.deltaTime;
-
-        if (isWork && _time > period)
-        {
-            action.Invoke();
-            Refresh();
-        }
     }
 
     public void Refresh()
     {
         _time = 0;
+    }
+    public bool IsTime()
+    {
+        return _time >= period;
     }
 }
