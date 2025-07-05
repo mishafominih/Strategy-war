@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
@@ -16,6 +17,7 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
     private Rigidbody2D rb;
     private Collider2D collider;
     private iAnimationController animationController;
+    private float fireTimer = 10;  // Выстрел должен произойти сразу
     void Start()
     {
         moveController = GetComponent<DivisionMoveController>();
@@ -94,16 +96,26 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             }
             if (attackType == AttackType.Fire)
             {
+                fireTimer += Time.deltaTime;
                 if (!moveController.IsRotate() && allowedDistanceForFire())
                 {
-                    var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
-                    target.Damage(damage);
-                    target = null;
-                    moveController.Stop();
-                    animationController.AttackEvent(attackType);
+                    if (fireTimer > 5)
+                    {
+                        FireAttack();
+                        fireTimer = 0;
+
+                    }
                 }
             }
         }
+    }
+
+    private void FireAttack()
+    {
+        var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
+        target.Damage(damage);
+        moveController.Stop();
+        animationController.AttackEvent(attackType);
     }
 
     public Vector2 GetPosition()
