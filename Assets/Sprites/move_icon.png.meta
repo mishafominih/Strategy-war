@@ -1,16 +1,52 @@
 fileFormatVersion: 2
-guid: 6010b0cc2a7ea694ab61de1d0ada6481
+guid: c53cc3dc3f53cc8419381e7beeb9595a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4995086436515345966
-    second: icon_fire_0
+      213: -7717562771139642129
+    second: move_icon_0
+  - first:
+      213: -1513628347311017643
+    second: move_icon_1
+  - first:
+      213: 4613272664649841373
+    second: move_icon_2
+  - first:
+      213: 7761745198862939677
+    second: move_icon_3
+  - first:
+      213: 2044757984540149175
+    second: move_icon_4
+  - first:
+      213: -6497644158511699895
+    second: move_icon_5
+  - first:
+      213: 4720921949797070211
+    second: move_icon_6
+  - first:
+      213: -3253959382484689649
+    second: move_icon_7
+  - first:
+      213: 1863356773134257134
+    second: move_icon_8
+  - first:
+      213: 175677157352405648
+    second: move_icon_9
+  - first:
+      213: -5866805272752289043
+    second: move_icon_10
+  - first:
+      213: 8302977481554961810
+    second: move_icon_11
+  - first:
+      213: -4769597875844033996
+    second: move_icon_12
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
-    sRGBTexture: 0
+    sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
@@ -55,7 +91,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -126,23 +162,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: icon_fire_0
+      name: move_icon_4
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 400
-        height: 400
+        width: 736
+        height: 754
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e267ede16ac125540800000000000000
-      internalID: 4995086436515345966
+      spriteID: 7b5c828ad80706c10800000000000000
+      internalID: 2044757984540149175
       vertices: []
       indices: 
       edges: []
@@ -151,7 +187,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6c451a236b660a54f973653b1f068f88
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +197,19 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      icon_fire_0: 4995086436515345966
+      move_icon_0: -7717562771139642129
+      move_icon_1: -1513628347311017643
+      move_icon_10: -5866805272752289043
+      move_icon_11: 8302977481554961810
+      move_icon_12: -4769597875844033996
+      move_icon_2: 4613272664649841373
+      move_icon_3: 7761745198862939677
+      move_icon_4: 2044757984540149175
+      move_icon_5: -6497644158511699895
+      move_icon_6: 4720921949797070211
+      move_icon_7: -3253959382484689649
+      move_icon_8: 1863356773134257134
+      move_icon_9: 175677157352405648
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

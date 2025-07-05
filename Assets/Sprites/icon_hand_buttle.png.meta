@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 71942dc76ef943349b6414871fc9d9e7
+guid: 7c14a2fc1239a2c4b8e41c3328faadb4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3743957659742367504
-    second: Move_0
+      213: -481183208924525649
+    second: icon_hand_buttle_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Move_0
+      name: icon_hand_buttle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 736
-        height: 754
+        width: 1280
+        height: 1280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 01feb0bb7a535f330800000000000000
-      internalID: 3743957659742367504
+      spriteID: fabcb20cb6e7259f0800000000000000
+      internalID: -481183208924525649
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3288207067575b14999d0e761a918ef9
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Move_0: 3743957659742367504
+      icon_hand_buttle_0: -481183208924525649
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
