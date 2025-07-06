@@ -47,7 +47,15 @@ public class UnitInfoUI : MonoBehaviour
         }
         else  // Нажали первый раз, ставим выделение
         {
-            highlighted.Add(highlightedItem);
+            if (highlighted.Count > 0 && highlighted[0].getButtleUnit().getType() == highlightedItem.getButtleUnit().getType())
+            {
+                highlighted.Add(highlightedItem);
+            }
+            else
+            {
+                UnHighlight(null);
+                highlighted.Add(highlightedItem);
+            }
             gameObject.SetActive(true);
 
             foreach (AttackType button in highlightedItem.getButtleUnit().getAttackTypes())
