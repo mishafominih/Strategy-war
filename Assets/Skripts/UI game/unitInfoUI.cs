@@ -5,13 +5,14 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class UnitInfoUI : MonoBehaviour
 {
     [SerializeField]
     public List<GameObject> buttons = new List<GameObject>();
-    public iHighlighted highlighted;
+    public List<iHighlighted> highlighted = new List<iHighlighted>();
 
     private TMP_Text textMesh;
 
@@ -31,49 +32,51 @@ public class UnitInfoUI : MonoBehaviour
 
     private void eventTouchHighlightedHandler(iHighlighted highlightedItem)
     {
-        if (highlighted == highlightedItem)  // Нажали на тот же юнит, снимаем выделение
+        if (buttonPressed == ButtonType.Attack)  // Нажали на кнопку атаки
         {
-            UnHighlight();
+            if (highlighted[0].getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
+            {
+                foreach (var h in highlighted)
+                    h.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
+            }
+            UnHighlight(null);
         }
-        else if (highlighted == null)  // Нажали первый раз, ставим выделение
+        else if (highlighted.Contains(highlightedItem))  // Нажали на тот же юнит, снимаем выделение
         {
-            highlighted = highlightedItem;
+            UnHighlight(highlightedItem);
+        }
+        else  // Нажали первый раз, ставим выделение
+        {
+            highlighted.Add(highlightedItem);
             gameObject.SetActive(true);
 
-            foreach (AttackType button in highlighted.getButtleUnit().getAttackTypes())
+            foreach (AttackType button in highlightedItem.getButtleUnit().getAttackTypes())
                 if (buttons.Count > (int)button)
                     buttons[(int)button].SetActive(true);
 
-            highlighted.highlight();
-            EventsManager.eventHighlight.Invoke(highlighted);
-        }
-        else if (buttonPressed == ButtonType.Attack)  // Нажали на кнопку атаки
-        {
-            if (highlighted.getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
-            {
-                highlighted.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
-            }
-            UnHighlight();
-        }
-        else  // Нажали на другого юнита, перекинем выделение на него
-        {
-            highlighted.unHighlight();
-            EventsManager.eventUnHighlight.Invoke(highlighted);
-
-            highlighted = highlightedItem;
-
-            highlighted.highlight();
-            EventsManager.eventHighlight.Invoke(highlighted);
+            highlightedItem.highlight();
+            EventsManager.eventHighlight.Invoke(highlightedItem);
         }
     }
 
-    private void UnHighlight()
+    private void UnHighlight(iHighlighted highlightedItem)
     {
-        buttonPressed = ButtonType.None;
-        gameObject.SetActive(false);
-        highlighted.unHighlight();
-        EventsManager.eventUnHighlight.Invoke(highlighted);
-        highlighted = null;
+        if (highlightedItem != null)
+        {
+            highlightedItem.unHighlight();
+            EventsManager.eventUnHighlight.Invoke(highlightedItem);
+            highlighted.Remove(highlightedItem);
+        }
+        else
+        {
+            foreach (var h in new List<iHighlighted>(highlighted))
+                UnHighlight(h);
+        }
+        if (highlighted.Count == 0)
+        {
+            buttonPressed = ButtonType.None;
+            gameObject.SetActive(false);
+        }
     }
 
     private void eventTouchEmptyHandler(Vector2 position)
@@ -82,22 +85,30 @@ public class UnitInfoUI : MonoBehaviour
         {
             if (buttonPressed == ButtonType.Move)
             {
-                highlighted.moveTo(position);
+                foreach (var h in highlighted)
+                    h.moveTo(position);
             }
 
-            UnHighlight();
+            UnHighlight(null);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        var buttleUnit = highlighted.getButtleUnit();
+        float unitCount = 0, defPoints = 0, attackPoints = 0;
+        foreach (var h in highlighted)
+        {
+            var buttleUnit = h.getButtleUnit();
+            unitCount += buttleUnit.getUnitCount();
+            defPoints += buttleUnit.getDefencePoints(TypeTroops.infantry);
+            attackPoints += buttleUnit.getAttackPoints();
+        }
         textMesh.text = string.Format(
             "Солдат: {0}\r\nЗащита: {1}\r\nАтака: {2}",
-            (int)buttleUnit.getUnitCount(),
-            buttleUnit.getDefencePoints(TypeTroops.infantry),
-            buttleUnit.getAttackPoints()
+            (int)unitCount,
+            defPoints,
+            attackPoints
         );
     }
 
