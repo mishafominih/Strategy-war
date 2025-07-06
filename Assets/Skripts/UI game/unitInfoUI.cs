@@ -26,6 +26,7 @@ public class UnitInfoUI : MonoBehaviour
 
 
         UnHighlight(null);  // Вначале нет ничего выделенного. ОТображать панельку нет смысла
+        EventsManager.eventButtleUnitDie.AddListener(buttleUnitDieHandler);
     }
 
     private void eventTouchHighlightedHandler(iHighlighted highlightedItem)
@@ -103,6 +104,15 @@ public class UnitInfoUI : MonoBehaviour
         }
     }
 
+    protected void buttleUnitDieHandler(iButtleUnit buttleUnit)
+    {
+        foreach (var h in highlighted)
+            if (h.getButtleUnit() == buttleUnit)
+            {
+                UnHighlight(h);
+                break;
+            }
+    }
     // Update is called once per frame
     void Update()
     {
