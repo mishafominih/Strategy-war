@@ -24,10 +24,8 @@ public class UnitInfoUI : MonoBehaviour
         EventsManager.eventTouchHighlighted.AddListener(eventTouchHighlightedHandler);
         EventsManager.eventTouchEmpty.AddListener(eventTouchEmptyHandler);
 
-        gameObject.SetActive(false);  // Вначале нет ничего выделенного. ОТображать панельку нет смысла
 
-        foreach (GameObject button in buttons)
-            button.SetActive(false);
+        UnHighlight(null);  // Вначале нет ничего выделенного. ОТображать панельку нет смысла
     }
 
     private void eventTouchHighlightedHandler(iHighlighted highlightedItem)
@@ -47,15 +45,17 @@ public class UnitInfoUI : MonoBehaviour
         }
         else  // Нажали первый раз, ставим выделение
         {
-            if (highlighted.Count > 0 && highlighted[0].getButtleUnit().getType() == highlightedItem.getButtleUnit().getType())
+            if (highlighted.Count > 0)
             {
-                highlighted.Add(highlightedItem);
+                var isOneType = highlighted[0].getButtleUnit().getType() == highlightedItem.getButtleUnit().getType();
+                var isOneColor = highlighted[0].getButtleUnit().GetColor() == highlightedItem.getButtleUnit().GetColor();
+                if (!isOneType || !isOneColor)
+                {
+                    UnHighlight(null);
+                }
             }
-            else
-            {
-                UnHighlight(null);
-                highlighted.Add(highlightedItem);
-            }
+            highlighted.Add(highlightedItem);
+
             gameObject.SetActive(true);
 
             foreach (AttackType button in highlightedItem.getButtleUnit().getAttackTypes())
@@ -83,6 +83,8 @@ public class UnitInfoUI : MonoBehaviour
         if (highlighted.Count == 0)
         {
             buttonPressed = ButtonType.None;
+            foreach (GameObject button in buttons)
+                button.SetActive(false);
             gameObject.SetActive(false);
         }
     }
@@ -115,8 +117,8 @@ public class UnitInfoUI : MonoBehaviour
         textMesh.text = string.Format(
             "Солдат: {0}\r\nЗащита: {1}\r\nАтака: {2}",
             (int)unitCount,
-            defPoints,
-            attackPoints
+            defPoints / highlighted.Count,
+            attackPoints / highlighted.Count
         );
     }
 
