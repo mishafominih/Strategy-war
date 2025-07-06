@@ -1148,7 +1148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1017970568607547687, guid: a9dab0a9fca70864ea23cc7123a6b82a, type: 3}
       propertyPath: m_Mass
-      value: 0.165
+      value: 0.16499998
       objectReference: {fileID: 0}
     - target: {fileID: 3339204402632978063, guid: a9dab0a9fca70864ea23cc7123a6b82a, type: 3}
       propertyPath: m_Name
@@ -1430,6 +1430,10 @@ PrefabInstance:
     - target: {fileID: 4524756408637209342, guid: db2a04a4010368541a98d5aa06c327d7, type: 3}
       propertyPath: m_Name
       value: Cavalry (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7515613900468596024, guid: db2a04a4010368541a98d5aa06c327d7, type: 3}
+      propertyPath: m_Mass
+      value: 0.16499998
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1758,7 +1762,7 @@ Transform:
   m_GameObject: {fileID: 1949653618}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
   m_LocalScale: {x: 0.73, y: 0.87, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,56 +1,7 @@
 using UnityEngine;
 
-public class DivisionMoveController : MonoBehaviour, iMoveController
+public class DivisionMoveController : BaseMoveController
 {
-    [SerializeField] public float velocity;
-    [SerializeField] public float speedRotation;
-
-    private Vector2 targetPosition;
-    private Rigidbody2D rb;
-    private float targetAngle = 0;
-    public void moveTo(Vector2 pos)
-    {
-        Stop();
-        targetPosition = pos;
-        targetAngle = calcTargetAngle(pos);
-    }
-
-    private float calcTargetAngle(Vector2 pos)
-    {
-        Vector2 distanceVector = pos - rb.position;
-        var angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg - 90;
-        var targetAngle = angle - rb.rotation;
-
-        while (targetAngle < -180)
-            targetAngle += 360;
-        while (targetAngle > 180)
-            targetAngle -= 360;
-        return targetAngle;
-    }
-
-    public void Stop()
-    {
-        stopMove();
-        targetPosition = transform.position;
-        stopRotate();
-    }
-
-    private void stopMove()
-    {
-        rb.linearVelocity = Vector2.zero;
-    }
-
-    private void stopRotate()
-    {
-        targetAngle = 0;
-    }
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        targetPosition = rb.position;
-    }
-
     void FixedUpdate()
     {
         Vector2 distanceVector = targetPosition - rb.position;
@@ -68,34 +19,5 @@ public class DivisionMoveController : MonoBehaviour, iMoveController
         {
             Stop();
         }
-    }
-
-    private void rotate()
-    {
-        var multiple = targetAngle >= 0 ? 1 : -1;
-        var deltaAngle = multiple * speedRotation * Time.fixedDeltaTime;
-        rb.MoveRotation(rb.rotation + deltaAngle);
-        targetAngle -= deltaAngle;
-    }
-
-    private void move(Vector2 distanceVector)
-    {
-        rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
-    }
-
-    public bool IsMove()
-    {
-        return rb.linearVelocity.magnitude > 0.001f;
-    }
-
-    public void rotateTo(Vector2 pos)
-    {
-        Stop();
-        targetAngle = calcTargetAngle(pos);
-    }
-
-    public bool IsRotate()
-    {
-        return Mathf.Abs(targetAngle) > 1f;
     }
 }

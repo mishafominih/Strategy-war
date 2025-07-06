@@ -1,14 +1,11 @@
 using System;
 using UnityEngine;
 
-public class CavalryAnimationController : MonoBehaviour, iAnimationController
+public class BaseAnimationController : MonoBehaviour, iAnimationController
 {
-    private iButtleUnit buttleUnit;
+    protected iButtleUnit buttleUnit;
 
-    public void AttackEvent(AttackType attackType)
-    {
-
-    }
+    public virtual void AttackEvent(AttackType attackType) { }
 
     void Start()
     {
@@ -16,6 +13,11 @@ public class CavalryAnimationController : MonoBehaviour, iAnimationController
     }
 
     void FixedUpdate()
+    {
+        UpdateScale();
+    }
+
+    protected void UpdateScale()
     {
         if (buttleUnit != null)
         {

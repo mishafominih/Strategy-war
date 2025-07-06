@@ -5,87 +5,18 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
+public class DivisionButtleUnit : BaseButtleUnit
 {
-    [SerializeField]
-    protected EnemyColor enemyColor;
-    [SerializeField]
-    protected float UnitCount, damagePoints, defensePoints;
-
     private iMoveController moveController;
-    private iButtleUnit target;
-    private AttackType attackType;
     private Rigidbody2D rb;
-    private Collider2D collider;
     private iAnimationController animationController;
     private Timer fireTimer = new Timer(5, 5).Start();  // Выстрел должен произойти сразу
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         moveController = GetComponent<iMoveController>();
         rb = GetComponent<Rigidbody2D>();
-        collider = GetComponent<Collider2D>();
         animationController = GetComponent<iAnimationController>();
-
-        EventsManager.eventButtleUnitDie.AddListener(buttleUnitDieHandler);
-    }
-
-    private void buttleUnitDieHandler(iButtleUnit buttleUnit)
-    {
-        if (buttleUnit == target)
-        {
-            BreakAttack();
-        }
-    }
-
-    public TypeTroops getType()
-    {
-        return TypeTroops.infantry;
-    }
-
-    public float getDefencePoints(TypeTroops typeTroops)
-    {
-        return defensePoints;
-    }
-
-    public float getAttackPoints()
-    {
-        return damagePoints;
-    }
-
-    public float getUnitCount()
-    {
-        return UnitCount;
-    }
-
-    public bool Attack(iButtleUnit buttleUnit, AttackType attackType)
-    {
-        if (attackType == AttackType.HandButtle)
-        {
-            target = buttleUnit;
-            this.attackType = attackType;
-            moveController.moveTo(target.GetPosition());
-        }
-        else if (attackType == AttackType.Fire)
-        {
-            target = buttleUnit;
-            this.attackType = attackType;
-            if (allowedDistanceForFire())
-            {
-                moveController.rotateTo(target.GetPosition());
-            }
-            else
-            {
-                moveController.moveTo(target.GetPosition());
-            }
-        }
-
-        return true;
-    }
-
-    private bool allowedDistanceForFire()
-    {
-        var distance = target.GetPosition() - GetPosition();
-        return distance.magnitude < 3;
     }
 
     void FixedUpdate()
@@ -108,6 +39,14 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
             if (attackType == AttackType.Fire)
             {
                 fireTimer.Update();
+                if (allowedDistanceForFire())
+                {
+                    moveController.rotateTo(target.GetPosition());
+                }
+                else
+                {
+                    moveController.moveTo(target.GetPosition());
+                }
                 if (!moveController.IsRotate() && allowedDistanceForFire())
                 {
                     if (fireTimer.IsTime())
@@ -124,50 +63,29 @@ public class DivisionButtleUnit : MonoBehaviour, iButtleUnit
         }
     }
 
-    public Vector2 GetPosition()
+    private bool allowedDistanceForFire()
     {
-        return transform.position;
+        var distance = target.GetPosition() - GetPosition();
+        return distance.magnitude < 3;
     }
 
-    public void Damage(float damage)
+    public override TypeTroops getType()
     {
-        var c = (damage / defensePoints) * Time.deltaTime * 0.01f;
-        UnitCount -= c;
-        if (UnitCount <= 0)
-        {
-            // Публикуем событие о своей смерти
-            EventsManager.eventButtleUnitDie.Invoke(this);
-            Destroy(gameObject);
-        }
+        return TypeTroops.infantry;
     }
 
-    public Collider2D GetCollider()
+    public override void BreakAttack()
     {
-        return collider;
-    }
-
-    public void BreakAttack()
-    {
-        target = null;
+        base.BreakAttack();
         fireTimer.Refresh();
     }
 
-    public bool IsEnemy(iButtleUnit buttleUnit)
-    {
-        return enemyColor != buttleUnit.GetColor();
-    }
-
-    public EnemyColor GetColor()
-    {
-        return enemyColor;
-    }
-
-    public float GetMaxUnitCount()
+    public override float GetMaxUnitCount()
     {
         return 4000;
     }
 
-    public List<AttackType> getAttackTypes()
+    public override List<AttackType> getAttackTypes()
     {
         return new List<AttackType>() { AttackType.Fire, AttackType.HandButtle };
     }
