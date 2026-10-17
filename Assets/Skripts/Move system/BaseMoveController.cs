@@ -1,6 +1,5 @@
-using UnityEditor.Tilemaps;
+
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class BaseMoveController : MonoBehaviour, iMoveController
 {
@@ -43,7 +42,7 @@ public class BaseMoveController : MonoBehaviour, iMoveController
     public bool NeedRotate()
     {
         targetAngle = calcTargetAngle(targetPointToRotate);
-        return Mathf.Abs(targetAngle) > 1f;
+        return targetPointToRotate != Vector2.zero && Mathf.Abs(targetAngle) > 1f;
     }
 
     public bool NeedRotateToTarget()
@@ -80,6 +79,7 @@ public class BaseMoveController : MonoBehaviour, iMoveController
     protected void stopRotate()
     {
         targetAngle = 0;
+        targetPointToRotate = Vector2.zero;
         endPointToRotate = Vector2.zero;
     }
 

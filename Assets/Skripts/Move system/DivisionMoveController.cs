@@ -4,17 +4,14 @@ public class DivisionMoveController : BaseMoveController
 {
     void FixedUpdate()
     {
-        if (NeedMove())
+        if (NeedRotate())  // Вначале повернем в направлении цели
         {
-            if (NeedRotate())  // Вначале повернем в направлении цели
-            {
-                targetAngle = rotate(targetAngle);
-                stopMove();
-            }
-            else
-            {
-                move();
-            }
+            targetAngle = rotate(targetAngle);
+            stopMove();
+        }
+        else if (NeedMove())
+        {
+            move();
         }
         else
         {
