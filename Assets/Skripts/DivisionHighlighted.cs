@@ -20,7 +20,7 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
     public void moveTo(Vector2 pos)
     {
         getButtleUnit().BreakAttack();
-        GetComponent<iMoveController>().moveTo(pos);
+        GetComponent<iMoveController>().MoveTo(pos);
     }
 
     public iButtleUnit getButtleUnit()
@@ -31,6 +31,6 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
     public void moveToAndRotateTo(Vector2 pos, Vector2 PointToRotate)
     {
         getButtleUnit().BreakAttack();
-        GetComponent<iMoveController>().moveToAndRotateTo(pos, PointToRotate);
+        GetComponent<iMoveController>().MoveToAndRotateTo(pos, PointToRotate);
     }
 }

@@ -26,7 +26,7 @@ public class CavalryButtleUnit : BaseButtleUnit
                 }
                 else if (!moveController.NeedMove())
                 {
-                    moveController.moveTo(target.GetPosition());
+                    moveController.MoveTo(target.GetPosition());
                 }
             }
         }

@@ -6,56 +6,70 @@ public class BaseMoveController : MonoBehaviour, iMoveController
     [SerializeField] public float velocity;
     [SerializeField] public float speedRotation;
 
-    protected Vector2 targetPosition;
     protected Rigidbody2D rb;
-    protected Vector2 targetPointToRotate = Vector2.zero;  // Точка в направлении которой нужно повернуться когда закончили движение
-    protected float targetAngle = 0;
-    protected Vector2 endPointToRotate = Vector2.zero;  // Точка в направлении которой нужно повернуться когда закончили движение
-    protected float endTargetAngle = 0;  // Дошли до точки и нужно повернуться в нужном направлении
+
+    protected Vector2 targetPosition = Vector2.zero;
+    protected Vector2 targetPointToRotate = Vector2.zero;  // Точка в направлении которой нужно повернуться
+
 
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        targetPosition = rb.position;
     }
 
-    public void moveTo(Vector2 pos)
+    void FixedUpdate()
+    {
+        if (!IsActive())
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (NeedMove())
+        {
+            var targetAngle = calcTargetAngle(targetPosition);
+            if (Mathf.Abs(targetAngle) > 1f)
+                rotate(targetAngle);
+            else
+                move();
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+            var targetAngle = calcTargetAngle(targetPointToRotate);
+            if (targetPointToRotate != Vector2.zero && Mathf.Abs(targetAngle) > 1f)
+                rotate(targetAngle);
+            else
+                Stop();
+        }
+    }
+
+    public void MoveTo(Vector2 pos)
     {
         Stop();
+        rb.freezeRotation = false;
+
         targetPosition = pos;
-        targetPointToRotate = pos;
     }
 
     public bool NeedMove()
     {
         Vector2 distanceVector = targetPosition - rb.position;
-        return distanceVector.sqrMagnitude > 0.0001f;
+        return targetPosition != Vector2.zero && distanceVector.sqrMagnitude > 0.001f;
     }
 
-    public void rotateTo(Vector2 pos)
+    public void RotateTo(Vector2 pos)
     {
         Stop();
+        rb.freezeRotation = false;
+
         targetPointToRotate = pos;
-        targetAngle = calcTargetAngle(targetPointToRotate);
     }
 
     public bool NeedRotate()
     {
-        targetAngle = calcTargetAngle(targetPointToRotate);
+        var targetAngle = calcTargetAngle(targetPointToRotate);
         return targetPointToRotate != Vector2.zero && Mathf.Abs(targetAngle) > 1f;
-    }
-
-    public bool NeedRotateToTarget()
-    {
-        endTargetAngle = calcTargetAngle(endPointToRotate);
-        return endPointToRotate != Vector2.zero && Mathf.Abs(endTargetAngle) > 1f;
-    }
-
-    public void Stop()
-    {
-        stopMove();
-        targetPosition = transform.position;
-        stopRotate();
     }
 
     protected float calcTargetAngle(Vector2 pos)
@@ -71,35 +85,39 @@ public class BaseMoveController : MonoBehaviour, iMoveController
         return targetAngle;
     }
 
-    protected void stopMove()
+    public void Stop()
     {
         rb.linearVelocity = Vector2.zero;
-    }
+        rb.freezeRotation = true;
 
-    protected void stopRotate()
-    {
-        targetAngle = 0;
+        targetPosition = Vector2.zero;
         targetPointToRotate = Vector2.zero;
-        endPointToRotate = Vector2.zero;
     }
 
-    protected float rotate(float angle)
+    protected void rotate(float angle)
     {
         var multiple = angle >= 0 ? 1 : -1;
         var deltaAngle = multiple * speedRotation * Time.fixedDeltaTime;
         rb.MoveRotation(rb.rotation + deltaAngle);
-        return angle - deltaAngle;
     }
 
     protected void move()
     {
+        if (targetPosition == Vector2.zero)
+            return;
+
         Vector2 distanceVector = targetPosition - rb.position;
         rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
     }
 
-    public void moveToAndRotateTo(Vector2 pos, Vector2 PointToRotate)
+    public void MoveToAndRotateTo(Vector2 pos, Vector2 PointToRotate)
     {
-        moveTo(pos);
-        endPointToRotate = PointToRotate;
+        MoveTo(pos);
+        targetPointToRotate = PointToRotate;
+    }
+
+    public bool IsActive()
+    {
+        return targetPosition != Vector2.zero || targetPointToRotate != Vector2.zero;
     }
 }

@@ -33,7 +33,7 @@ public class DivisionButtleUnit : BaseButtleUnit
                 }
                 else if (!moveController.NeedMove())
                 {
-                    moveController.moveTo(target.GetPosition());
+                    moveController.MoveTo(target.GetPosition());
                 }
             }
             if (attackType == AttackType.Fire)
@@ -41,11 +41,11 @@ public class DivisionButtleUnit : BaseButtleUnit
                 fireTimer.Update();
                 if (allowedDistanceForFire())
                 {
-                    moveController.rotateTo(target.GetPosition());
+                    moveController.RotateTo(target.GetPosition());
                 }
                 else
                 {
-                    moveController.moveTo(target.GetPosition());
+                    moveController.MoveTo(target.GetPosition());
                 }
                 if (!moveController.NeedRotate() && allowedDistanceForFire())
                 {
