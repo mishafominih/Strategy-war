@@ -31,7 +31,7 @@ public class DivisionButtleUnit : BaseButtleUnit
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }
-                else if (!moveController.NeedMove())
+                else
                 {
                     moveController.MoveTo(target.GetPosition());
                 }
@@ -41,23 +41,26 @@ public class DivisionButtleUnit : BaseButtleUnit
                 fireTimer.Update();
                 if (allowedDistanceForFire())
                 {
-                    moveController.RotateTo(target.GetPosition());
+                    if (moveController.NeedRotateTo(target.GetPosition()))
+                    {
+                        moveController.RotateTo(target.GetPosition());
+                    }
+                    else
+                    {
+                        if (fireTimer.IsTime())
+                        {
+                            var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
+                            target.Damage(damage);
+                            moveController.Stop();
+                            animationController.AttackEvent(attackType);
+
+                            fireTimer.Drop();
+                        }
+                    }
                 }
                 else
                 {
                     moveController.MoveTo(target.GetPosition());
-                }
-                if (!moveController.NeedRotate() && allowedDistanceForFire())
-                {
-                    if (fireTimer.IsTime())
-                    {
-                        var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
-                        target.Damage(damage);
-                        moveController.Stop();
-                        animationController.AttackEvent(attackType);
-
-                        fireTimer.Drop();
-                    }
                 }
             }
         }

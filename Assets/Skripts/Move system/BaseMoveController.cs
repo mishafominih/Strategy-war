@@ -66,10 +66,10 @@ public class BaseMoveController : MonoBehaviour, iMoveController
         targetPointToRotate = pos;
     }
 
-    public bool NeedRotate()
+    public bool NeedRotateTo(Vector2 pos)
     {
-        var targetAngle = calcTargetAngle(targetPointToRotate);
-        return targetPointToRotate != Vector2.zero && Mathf.Abs(targetAngle) > 1f;
+        var targetAngle = calcTargetAngle(pos);
+        return Mathf.Abs(targetAngle) > 1f;
     }
 
     protected float calcTargetAngle(Vector2 pos)

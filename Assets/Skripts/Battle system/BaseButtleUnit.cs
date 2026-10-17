@@ -59,7 +59,7 @@ public class BaseButtleUnit : MonoBehaviour, iButtleUnit
         return 0;
     }
 
-    public bool Attack(iButtleUnit buttleUnit, AttackType attackType)
+    public virtual bool Attack(iButtleUnit buttleUnit, AttackType attackType)
     {
         target = buttleUnit;
         this.attackType = attackType;
