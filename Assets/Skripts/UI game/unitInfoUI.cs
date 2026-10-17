@@ -29,43 +29,62 @@ public class UnitInfoUI : MonoBehaviour
         EventsManager.eventButtleUnitDie.AddListener(buttleUnitDieHandler);
     }
 
-    private void eventTouchHighlightedHandler(iHighlighted highlightedItem)
+    private void eventTouchHighlightedHandler(List<iHighlighted> highlighteds)
     {
         if (buttonPressed == ButtonType.Attack)  // Нажали на кнопку атаки
         {
-            if (highlighted[0].getButtleUnit().IsEnemy(highlightedItem.getButtleUnit()))
+            var highlighted_item = highlighteds[0];
+            if (highlighted[0].getButtleUnit().IsEnemy(highlighted_item.getButtleUnit()))
             {
                 foreach (var h in highlighted)
-                    h.getButtleUnit().Attack(highlightedItem.getButtleUnit(), attackType);
+                    h.getButtleUnit().Attack(highlighted_item.getButtleUnit(), attackType);
             }
             UnHighlight(null);
         }
-        else if (highlighted.Contains(highlightedItem))  // Нажали на тот же юнит, снимаем выделение
+        else 
         {
-            UnHighlight(highlightedItem);
-        }
-        else  // Нажали первый раз, ставим выделение
-        {
-            if (highlighted.Count > 0)
+            bool has_unhighlited = false;
+            foreach (var highlighted_item in highlighteds)
             {
-                var isOneType = highlighted[0].getButtleUnit().getType() == highlightedItem.getButtleUnit().getType();
-                var isOneColor = highlighted[0].getButtleUnit().GetColor() == highlightedItem.getButtleUnit().GetColor();
-                if (!isOneType || !isOneColor)
-                {
-                    UnHighlight(null);
-                }
+                if (!highlighted.Contains(highlighted_item))
+                    has_unhighlited = true;
             }
-            highlighted.Add(highlightedItem);
-
-            gameObject.SetActive(true);
-
-            foreach (AttackType button in highlightedItem.getButtleUnit().getAttackTypes())
-                if (buttons.Count > (int)button)
-                    buttons[(int)button].SetActive(true);
-
-            highlightedItem.highlight();
-            EventsManager.eventHighlight.Invoke(highlightedItem);
+            if (has_unhighlited)
+            {
+                foreach (var highlighted_item in highlighteds)
+                    if (!highlighted.Contains(highlighted_item))
+                        Highlight(highlighted_item);
+            }
+            else
+            {
+                foreach (var highlighted_item in highlighteds)
+                    if (highlighted.Contains(highlighted_item))
+                        UnHighlight(highlighted_item);
+            }
         }
+    }
+
+    private void Highlight(iHighlighted highlighted_item)
+    {
+        if (highlighted.Count > 0)
+        {
+            //var isOneType = highlighted[0].getButtleUnit().getType() == highlightedItem.getButtleUnit().getType();
+            var isOneColor = highlighted[0].getButtleUnit().GetColor() == highlighted_item.getButtleUnit().GetColor();
+            if (!isOneColor)
+            {
+                UnHighlight(null);
+            }
+        }
+        highlighted.Add(highlighted_item);
+
+        gameObject.SetActive(true);
+
+        foreach (AttackType button in highlighted_item.getButtleUnit().getAttackTypes())
+            if (buttons.Count > (int)button)
+                buttons[(int)button].SetActive(true);
+
+        highlighted_item.highlight();
+        EventsManager.eventHighlight.Invoke(highlighted_item);
     }
 
     private void UnHighlight(iHighlighted highlightedItem)
@@ -90,14 +109,17 @@ public class UnitInfoUI : MonoBehaviour
         }
     }
 
-    private void eventTouchEmptyHandler(Vector2 position)
+    private void eventTouchEmptyHandler(Vector2 startTouchPosition, Vector2 endTouchPosition)
     {
         if (highlighted != null)
         {
             if (buttonPressed == ButtonType.Move)
             {
                 foreach (var h in highlighted)
-                    h.moveTo(position);
+                    if (startTouchPosition == endTouchPosition)
+                        h.moveTo(startTouchPosition);
+                    else
+                        h.moveToAndRotateTo(startTouchPosition, endTouchPosition);
             }
 
             UnHighlight(null);
@@ -113,7 +135,7 @@ public class UnitInfoUI : MonoBehaviour
                 break;
             }
     }
-    // Update is called once per frame
+
     void Update()
     {
         float unitCount = 0, defPoints = 0, attackPoints = 0;

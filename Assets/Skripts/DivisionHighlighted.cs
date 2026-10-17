@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class DivisionHighlighted : MonoBehaviour, iHighlighted
@@ -26,5 +27,11 @@ public class DivisionHighlighted : MonoBehaviour, iHighlighted
     public iButtleUnit getButtleUnit()
     {
         return GetComponent<iButtleUnit>();
+    }
+
+    public void moveToAndRotateTo(Vector2 pos, Vector2 PointToRotate)
+    {
+        getButtleUnit().BreakAttack();
+        GetComponent<iMoveController>().moveToAndRotateTo(pos, PointToRotate);
     }
 }

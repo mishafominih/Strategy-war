@@ -24,7 +24,7 @@ public class CavalryButtleUnit : BaseButtleUnit
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }
-                else if (!moveController.IsMove())
+                else if (!moveController.NeedMove())
                 {
                     moveController.moveTo(target.GetPosition());
                 }

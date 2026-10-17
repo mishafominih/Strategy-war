@@ -4,20 +4,29 @@ public class DivisionMoveController : BaseMoveController
 {
     void FixedUpdate()
     {
-        Vector2 distanceVector = targetPosition - rb.position;
-
-        if (IsRotate())  // Вначале повернем
+        if (NeedMove())
         {
-            rotate();
+            if (NeedRotate())  // Вначале повернем в направлении цели
+            {
+                targetAngle = rotate(targetAngle);
+                stopMove();
+            }
+            else
+            {
+                move();
+            }
+        }
+        else
+        {
             stopMove();
-        }
-        else if (distanceVector.sqrMagnitude > 0.0001f) // Затем начнем движение
-        {
-            move(distanceVector);
-        }
-        else  // Дошли. Остановимся
-        {
-            Stop();
+            if (NeedRotateToTarget()) // когда закончили идти - повернемся в направлении на заданную точку
+            {
+                endTargetAngle = rotate(endTargetAngle);
+            }
+            else
+            {
+                Stop();
+            }
         }
     }
 }

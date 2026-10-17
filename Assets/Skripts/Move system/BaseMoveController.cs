@@ -1,4 +1,6 @@
+using UnityEditor.Tilemaps;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class BaseMoveController : MonoBehaviour, iMoveController
 {
@@ -7,7 +9,10 @@ public class BaseMoveController : MonoBehaviour, iMoveController
 
     protected Vector2 targetPosition;
     protected Rigidbody2D rb;
+    protected Vector2 targetPointToRotate = Vector2.zero;  // Точка в направлении которой нужно повернуться когда закончили движение
     protected float targetAngle = 0;
+    protected Vector2 endPointToRotate = Vector2.zero;  // Точка в направлении которой нужно повернуться когда закончили движение
+    protected float endTargetAngle = 0;  // Дошли до точки и нужно повернуться в нужном направлении
 
     protected void Start()
     {
@@ -19,23 +24,32 @@ public class BaseMoveController : MonoBehaviour, iMoveController
     {
         Stop();
         targetPosition = pos;
-        targetAngle = calcTargetAngle(pos);
+        targetPointToRotate = pos;
     }
 
-    public bool IsMove()
+    public bool NeedMove()
     {
-        return rb.linearVelocity.magnitude > 0.001f;
+        Vector2 distanceVector = targetPosition - rb.position;
+        return distanceVector.sqrMagnitude > 0.0001f;
     }
 
     public void rotateTo(Vector2 pos)
     {
         Stop();
-        targetAngle = calcTargetAngle(pos);
+        targetPointToRotate = pos;
+        targetAngle = calcTargetAngle(targetPointToRotate);
     }
 
-    public bool IsRotate()
+    public bool NeedRotate()
     {
+        targetAngle = calcTargetAngle(targetPointToRotate);
         return Mathf.Abs(targetAngle) > 1f;
+    }
+
+    public bool NeedRotateToTarget()
+    {
+        endTargetAngle = calcTargetAngle(endPointToRotate);
+        return endPointToRotate != Vector2.zero && Mathf.Abs(endTargetAngle) > 1f;
     }
 
     public void Stop()
@@ -66,19 +80,26 @@ public class BaseMoveController : MonoBehaviour, iMoveController
     protected void stopRotate()
     {
         targetAngle = 0;
+        endPointToRotate = Vector2.zero;
     }
 
-    protected void rotate()
+    protected float rotate(float angle)
     {
-        var multiple = targetAngle >= 0 ? 1 : -1;
+        var multiple = angle >= 0 ? 1 : -1;
         var deltaAngle = multiple * speedRotation * Time.fixedDeltaTime;
         rb.MoveRotation(rb.rotation + deltaAngle);
-        targetAngle -= deltaAngle;
+        return angle - deltaAngle;
     }
 
-    protected void move(Vector2 distanceVector)
+    protected void move()
     {
+        Vector2 distanceVector = targetPosition - rb.position;
         rb.linearVelocity = distanceVector.normalized * velocity * Time.fixedDeltaTime;
     }
 
+    public void moveToAndRotateTo(Vector2 pos, Vector2 PointToRotate)
+    {
+        moveTo(pos);
+        endPointToRotate = PointToRotate;
+    }
 }

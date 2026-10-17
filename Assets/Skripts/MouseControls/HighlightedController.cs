@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class HighlightedController : iMouseEventHandler
 {
     private List<iHighlighted> highlighted = new List<iHighlighted>();  // Список выделенных объектов
-
+    private Vector2 startTouchPosition;
     public HighlightedController()
     {
         EventsManager.eventHighlight.AddListener(eventHighltghtedHandler);
@@ -31,24 +31,31 @@ public class HighlightedController : iMouseEventHandler
     {
         var position = camera.ScreenToWorldPoint(touchPosition, Camera.MonoOrStereoscopicEye.Mono);
 
-        Collider2D collider = Physics2D.OverlapPoint(position);
-        if (collider != null)
+        Collider2D[] colliders = Physics2D.OverlapPointAll(position);
+        if (colliders != null && colliders.Length > 0)
         {
-            iHighlighted highlighted_item = collider.gameObject.GetComponent<iHighlighted>();
-            if (highlighted_item != null)
+            List<iHighlighted> highlighteds = new List<iHighlighted>();
+            foreach (var collider in colliders)
             {
-                EventsManager.eventTouchHighlighted.Invoke(highlighted_item);
+                iHighlighted highlighted_item = collider.gameObject.GetComponent<iHighlighted>();
+                if (highlighted_item != null)
+                    highlighteds.Add(highlighted_item);
+            }
+            if (highlighteds.Count > 0)
+            {
+                EventsManager.eventTouchHighlighted.Invoke(highlighteds);
             }
         }
         else
         {
-            EventsManager.eventTouchEmpty.Invoke(new Vector2(position.x, position.y));
+            EventsManager.eventTouchEmpty.Invoke(startTouchPosition, position);
         }
         return highlighted.Count > 0;
     }
 
     public bool touchDown(Camera camera, Vector2 touchPosition)
     {
+        startTouchPosition = camera.ScreenToWorldPoint(touchPosition, Camera.MonoOrStereoscopicEye.Mono);
         return highlighted.Count > 0;
     }
 
