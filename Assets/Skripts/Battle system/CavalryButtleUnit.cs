@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class CavalryButtleUnit : BaseButtleUnit
 {
+    [SerializeField] private BoxCollider2D attackCollider;
     private iMoveController moveController;
-    private Rigidbody2D rb;
     protected override void Start()
     {
         base.Start();
         moveController = GetComponent<iMoveController>();
-        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -18,9 +17,13 @@ public class CavalryButtleUnit : BaseButtleUnit
         {
             if (attackType == AttackType.HandButtle)
             {
-                if (rb.IsTouching(target.GetCollider()))
+                if (attackCollider.IsTouching(target.GetCollider()))
                 {
-                    moveController.Stop();
+                    if (moveController.NeedRotateTo(target.GetPosition()))
+                        moveController.RotateTo(target.GetPosition());
+                    else
+                        moveController.Stop();
+
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }

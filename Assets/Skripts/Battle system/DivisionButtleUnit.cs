@@ -8,14 +8,13 @@ using UnityEngine;
 public class DivisionButtleUnit : BaseButtleUnit
 {
     private iMoveController moveController;
-    private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D attackCollider;
     private iAnimationController animationController;
     private Timer fireTimer = new Timer(5, 5).Start();  // Выстрел должен произойти сразу
     protected override void Start()
     {
         base.Start();
         moveController = GetComponent<iMoveController>();
-        rb = GetComponent<Rigidbody2D>();
         animationController = GetComponent<iAnimationController>();
     }
 
@@ -25,9 +24,13 @@ public class DivisionButtleUnit : BaseButtleUnit
         {
             if (attackType == AttackType.HandButtle)
             {
-                if (rb.IsTouching(target.GetCollider()))
+                if (attackCollider.IsTouching(target.GetCollider()))
                 {
-                    moveController.Stop();
+                    if (moveController.NeedRotateTo(target.GetPosition()))
+                        moveController.RotateTo(target.GetPosition());
+                    else
+                        moveController.Stop();
+
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }
