@@ -31,6 +31,8 @@ public class DivisionButtleUnit : BaseButtleUnit
                     else
                         moveController.Stop();
 
+                    animationController.AttackEvent(attackType);
+
                     var damage = UnitCount * damagePoints;
                     target.Damage(damage);
                 }
@@ -50,11 +52,12 @@ public class DivisionButtleUnit : BaseButtleUnit
                     }
                     else
                     {
+                        moveController.Stop();
                         if (fireTimer.IsTime())
                         {
                             var damage = UnitCount * damagePoints / 4 / Time.deltaTime / 0.01f;
                             target.Damage(damage);
-                            moveController.Stop();
+
                             animationController.AttackEvent(attackType);
 
                             fireTimer.Drop();
